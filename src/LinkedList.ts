@@ -3,18 +3,26 @@ interface Node<T> {
   next: Node<T> | null;
 }
 
-export function LinkedListFactory<T>() {
+export interface LinkedList<T> {
+  append(element: T): void;
+  indexOf(element: T): number;
+  insertAt(position: number, element: T): boolean;
+  remove(element: T): null | T;
+  removeAt(position: number): null | T;
+  toString(): string;
+}
+
+export function LinkedListFactory<T>(): LinkedList<T> {
   let length = 0;
   let head: Node<T> | null = null;
 
   return {
     append,
-    print,
-    removeAt,
-    insertAt,
-    toString,
     indexOf,
+    insertAt,
     remove,
+    removeAt,
+    toString,
   };
 
   function append(element: T) {
@@ -38,85 +46,7 @@ export function LinkedListFactory<T>() {
     length++;
   }
 
-  function print() {
-    console.log(head);
-  }
-
-  function removeAt(position: number) {
-    if (position > -1 && position < length) {
-      let currentNode = head;
-
-      if (position === 0) {
-        head = currentNode.next;
-        return currentNode.element;
-      } else {
-        let currentIndex = 0;
-        let previousNode = null;
-
-        while (currentIndex++ < position) {
-          previousNode = currentNode;
-          currentNode = currentNode.next;
-        }
-
-        // skip the current element
-        previousNode.next = currentNode.next;
-
-        length--;
-
-        return currentNode.element;
-      }
-    } else {
-      return null;
-    }
-  }
-
-  function insertAt(position, element) {
-    const node = {
-      element,
-      next: null,
-    };
-
-    let currentNode = head;
-
-    if (position > -1 && position <= length) {
-      if (position === 0) {
-        node.next = currentNode;
-        head = node;
-      } else {
-        let previousNode;
-        let index = 0;
-
-        while (index++ < position) {
-          previousNode = currentNode;
-          currentNode = currentNode.next;
-        }
-
-        previousNode.next = node;
-        node.next = currentNode;
-      }
-
-      length++;
-
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  function toString() {
-    let result = "";
-    let current = head;
-
-    while (current) {
-      result += `${current.element}${current.next ? ", " : ""}`;
-
-      current = current.next;
-    }
-
-    return result;
-  }
-
-  function indexOf(element) {
+  function indexOf(element: T) {
     let currentNode = head;
     let index = 0;
 
@@ -132,9 +62,88 @@ export function LinkedListFactory<T>() {
     return -1;
   }
 
-  function remove(element) {
+  function insertAt(position: number, element: T) {
+    const isPositionInTheRange = position > -1 && position <= length;
+
+    if (!isPositionInTheRange) {
+      return false;
+    }
+
+    const node: Node<T> = {
+      element,
+      next: null,
+    };
+    const isHeadPosition = position === 0;
+    let currentNode = head;
+
+    if (isHeadPosition) {
+      node.next = currentNode;
+      head = node;
+    } else {
+      let previousNode: Node<T> | null = null;
+      let index = 0;
+
+      while (index++ < position) {
+        previousNode = currentNode as Node<T>;
+        currentNode = (currentNode as Node<T>).next;
+      }
+
+      (previousNode as Node<T>).next = node;
+      node.next = currentNode;
+    }
+
+    length++;
+
+    return true;
+  }
+
+  function removeAt(position: number) {
+    const isPositionInTheRange = position > -1 && position < length;
+
+    if (!isPositionInTheRange) {
+      return null;
+    }
+
+    let currentNode = head;
+
+    const isHeadPosition = position === 0;
+
+    if (isHeadPosition) {
+      head = (currentNode as Node<T>).next;
+    } else {
+      let index = 0;
+      let previousNode: Node<T> | null = null;
+
+      while (index++ < position) {
+        previousNode = currentNode;
+        currentNode = (currentNode as Node<T>).next;
+      }
+
+      // skip the current element
+      (previousNode as Node<T>).next = (currentNode as Node<T>).next;
+
+      length--;
+    }
+
+    return (currentNode as Node<T>).element;
+  }
+
+  function remove(element: T) {
     const elementIndex = indexOf(element);
 
     return removeAt(elementIndex);
+  }
+
+  function toString() {
+    let result = "";
+    let current = head;
+
+    while (current) {
+      result += `${current.element}${current.next ? ", " : ""}`;
+
+      current = current.next;
+    }
+
+    return result;
   }
 }
