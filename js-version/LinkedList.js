@@ -9,7 +9,9 @@ export function LinkedListFactory() {
     removeAt,
     toString,
     isEmpty,
-    head,
+    get head() {
+      return head;
+    },
     size,
   };
   function append(element) {

@@ -8,16 +8,22 @@
   "scripts": {
     "build": "tsc",
     "test": "jest",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "@babel/core": "^7.14.6",
     "@babel/preset-env": "^7.14.7",
     "@babel/preset-typescript": "^7.14.5",
     "@types/jest": "^26.0.23",
+    "husky": ">=6",
     "jest": "^27.0.5",
+    "lint-staged": ">=10",
     "prettier": "^2.3.2",
     "ts-node": "^10.0.0",
     "typescript": "^4.3.4"
+  },
+  "lint-staged": {
+    "*.{js,ts,md}": "prettier --write"
   }
 }
