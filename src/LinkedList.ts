@@ -10,6 +10,9 @@ export interface LinkedList<T> {
   remove(element: T): null | T;
   removeAt(position: number): null | T;
   toString(): string;
+  head: Node<T> | null;
+  isEmpty(): boolean;
+  size(): number;
 }
 
 export function LinkedListFactory<T>(): LinkedList<T> {
@@ -23,6 +26,11 @@ export function LinkedListFactory<T>(): LinkedList<T> {
     remove,
     removeAt,
     toString,
+    isEmpty,
+    get head() {
+      return head;
+    },
+    size,
   };
 
   function append(element: T) {
@@ -119,11 +127,10 @@ export function LinkedListFactory<T>(): LinkedList<T> {
         currentNode = (currentNode as Node<T>).next;
       }
 
-      // skip the current element
       (previousNode as Node<T>).next = (currentNode as Node<T>).next;
-
-      length--;
     }
+
+    length--;
 
     return (currentNode as Node<T>).element;
   }
@@ -135,15 +142,23 @@ export function LinkedListFactory<T>(): LinkedList<T> {
   }
 
   function toString() {
-    let result = "";
+    let result = '';
     let current = head;
 
     while (current) {
-      result += `${current.element}${current.next ? ", " : ""}`;
+      result += `${current.element}${current.next ? ', ' : ''}`;
 
       current = current.next;
     }
 
     return result;
+  }
+
+  function isEmpty() {
+    return length === 0;
+  }
+
+  function size() {
+    return length;
   }
 }
