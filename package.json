@@ -1,9 +1,8 @@
 {
   "name": "data-structure-ts-implementation",
   "version": "1.0.0",
-  "main": "index.js",
   "repository": "git@github.com:raulfdm/data-structure-ts-implementation.git",
-  "author": "Raul Melo <raul.de.melo@warnermedia.com>",
+  "author": "Raul Melo <melo.raulf@gmail.com>",
   "license": "MIT",
   "scripts": {
     "build": "tsc",
